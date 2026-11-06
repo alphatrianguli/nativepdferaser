@@ -1,64 +1,74 @@
-> **v1.0.1 maintenance update:** Fixed the empty-document message so it displays in English or German and updates immediately when switching languages.
+# Native PDF Eraser v1.0.1 — English / Deutsch
 
-# Native PDF Eraser 1.0.1 — English / Deutsch
+**Native PDF Eraser** is a free, open-source Windows application for removing selected PDF text, embedded images and vector graphics without converting whole pages into images. It is built with **Python, Tkinter and PyMuPDF**.
 
-A free-to-build, source-available Windows PDF editing application based on **Python, Tkinter and PyMuPDF**. Its purpose is to remove selected PDF text, embedded images and vector content without flattening the entire page.
+**Language / Sprache:** Switch between **English** and **Deutsch** in the toolbar without restarting the application or losing your edits.
 
-**Language / Sprache:** Use the dropdown on the upper toolbar to switch between **English** and **Deutsch**, immediately and without losing current edits. The public edition uses a neutral blue interface and has no company branding.
+## Download for Windows / Download für Windows
+
+**Ready-to-use Windows application — no Python installation or build required.**
+
+1. Open the **[latest GitHub Release](https://github.com/alphatrianguli/nativepdferaser/releases/latest)**.
+2. Under **Assets**, download **`Native-PDF-Eraser.exe`** (not *Source code (zip)*).
+3. Save the EXE anywhere you like and double-click it to launch the application.
+4. Open a PDF and start editing. No installer or additional Python packages are needed on the user's computer.
+
+**Deutsch:** Öffne die **[neueste Version auf GitHub](https://github.com/alphatrianguli/nativepdferaser/releases/latest)**, lade unter **Assets** die Datei **`Native-PDF-Eraser.exe`** herunter und starte sie per Doppelklick. **Python muss nicht installiert werden.**
+
+> **Security note / Sicherheitshinweis:** This portable EXE is currently unsigned, so Windows or antivirus software might display a warning. Download only from this project's GitHub Releases page, and review unexpected security alerts rather than disabling protection. / Die EXE ist derzeit nicht digital signiert. Lade sie nur von der offiziellen GitHub-Release-Seite herunter und prüfe unerwartete Sicherheitswarnungen.
 
 ## Features / Funktionen
 
-- Draw one or more rectangles over unwanted PDF content. Choose **Intelligent**, **Text only**, **Images only**, **Remove everything**, or **Vector graphics only**.
-- Recognize suitable embedded images and compact vector objects and adjust selections to their bounds.
-- Automatically suggest identical image logos, matching PDF text, and highly similar vector patterns at corresponding locations on other pages. You select the pages before removal.
-- Remove further elements in successive steps, undo the last completed step, or reset the entire session.
-- Save a separate verified PDF. Text, drawings, metadata, and content outside selected rectangles are checked for unintended differences.
+- Select unwanted content by drawing rectangles on PDF pages.
+- Choose **Intelligent**, **Text only**, **Images only**, **Remove everything** or **Vector graphics only**.
+- Automatically identify supported embedded images and compact vector graphics to refine a selection.
+- Suggest matching images, text or vector patterns on other pages; confirm which pages to edit.
+- Remove several elements in successive steps, undo the last completed step, or reset to the original PDF.
+- Save a separate PDF after checks for unintended changes to surrounding content, extracted text and metadata.
 
-## Use on Windows / Unter Windows starten
+## How to use / Kurzanleitung
 
-**Build a one-file executable:**
-1. Install Python 3.11–3.13 on **the Windows build computer**.
-2. Extract this ZIP, then double-click `Build_Windows_EXE.bat` (first build requires internet to install dependencies).
-3. When it finishes, distribute `dist\Native-PDF-Eraser.exe`.
-4. End users **do not need Python** or internet connectivity to run the resulting EXE.
+1. **Open PDF / PDF öffnen** — Choose your document.
+2. **Select / Markieren** — Draw a rectangle around the element you want to remove.
+3. **Review matches / Treffer prüfen** — Optionally confirm suggested matches on other pages.
+4. **Remove & verify / Entfernen & prüfen** — Inspect the processed result.
+5. **Repeat or Save As / Wiederholen oder Speichern unter** — Keep editing, or save a new PDF. The original is not overwritten.
 
-**Run from source:** Extract the ZIP and double-click `Run_on_Windows.bat` (requires Python on that computer).
+Keyboard shortcuts: `Ctrl+O` open, `Ctrl+S` save, `Ctrl+Z` undo rectangle, `Ctrl+Shift+Z` undo the last completed removal, `Ctrl+R` reset.
 
-The distributed ZIP contains **source code plus a Windows build script**, *not* a precompiled Windows executable. PyInstaller cannot cross-compile a Windows binary in this Linux build environment; the Windows build must be tested on Windows.
+## Build from source / Aus Quellcode erstellen
 
-## Typical workflow / Kurzanleitung
+**Only developers need this section.** Users can download the ready-made EXE above.
 
-1. **Open PDF / PDF öffnen**
-2. **Select an area / Bereich markieren** (the application may recognize the underlying object automatically)
-3. **Review suggestions / Weitere Seiten prüfen** — accept or reject individual page matches
-4. **Remove & verify / Entfernen & prüfen**
-5. Repeat or **Save As / Speichern unter**
+To build the single-file Windows EXE yourself:
 
-Keyboard shortcuts: `Ctrl+O` open, `Ctrl+S` save, `Ctrl+Z` undo rectangle, `Ctrl+Shift+Z` undo last completed removal, `Ctrl+R` reset.
+1. Download the repository source code or clone the repository.
+2. Install Python 3.11–3.13 on the **Windows build computer**.
+3. Run `Build_Windows_EXE.bat` (internet access is needed for the first dependency installation).
+4. Find the executable at `dist\Native-PDF-Eraser.exe`.
 
-## Limitations and privacy / Grenzen und Datenschutz
+Alternatively, run the Python source on Windows with `Run_on_Windows.bat` (requires Python).
 
-- The application **does not upload documents to a server**; all processing takes place on the user's device.
-- The program intentionally refuses edits that cannot pass its checks; this is not a guarantee of perfect preservation for every possible PDF structure.
-- It cannot reliably erase every kind of nested object, clipped vector path, scanned/outlined text or differently positioned and resized graphic.
-- Some embedded images are shared across pages. Removing only a subset of occurrences may be rejected. Confirm all proposed page matches carefully.
-- **Original document metadata and unrelated content are preserved**, so documents may still contain identifying information in metadata, annotations, hidden layers, unused resources or attachments. This is **not** an automated whole-document anonymizer. Review the final PDF before sharing.
-- Editing digitally signed PDFs invalidates signatures; encrypted/interactive documents may not be supported.
-- Always have permission to modify and redistribute the PDF itself.
-
-## Development / Entwicklung
-
-Install dependencies and run engine tests:
+### Run tests / Tests ausführen
 
 ```bash
 python -m pip install -r requirements.txt pytest
 python -m pytest -q tests
 ```
 
-The GUI smoke tests are in `tests/gui_*smoke.py` and require Windows or Linux/Xvfb. The one-file Windows EXE build has not yet been validated in this environment.
+GitHub Actions can also build and attach the Windows EXE to a GitHub Release; see `.github/workflows/` in the repository. The packaged EXE has been built through the release workflow, but not every possible Windows configuration or PDF structure has been independently tested.
 
-## Open-source licensing / Lizenz
+## Limitations and privacy / Grenzen und Datenschutz
 
-This source project is shared under **AGPL-3.0-or-later**, matching the AGPL licensing option for the PyMuPDF runtime. PyMuPDF is dual-licensed under AGPL or a commercial agreement; distributing a public compiled application brings additional legal obligations. Pillow and PyInstaller have separate licenses. See **`LICENSING.md`**, include the corresponding source and all required license notices when redistributing, and check with a legal professional if needed.
+- PDF files are processed on your computer; the application does not upload them to a server.
+- Not all PDFs can be edited safely. The application intentionally rejects operations that fail its preservation checks.
+- Some complex nested objects, clipped vector graphics, outlined/scanned text, or reused embedded images may require manual handling or cannot be safely removed.
+- Visual comparison alone does **not** prove complete sanitization. Original metadata, attachments, hidden layers or unrelated company references may remain in the PDF.
+- Modifying a digitally signed PDF generally invalidates its signature. Encrypted and interactive PDFs may not be supported.
+- Always review the final PDF and ensure you have permission to modify and redistribute the document.
+
+## License / Lizenz
+
+This application is shared under **AGPL-3.0-or-later** and uses **PyMuPDF** (AGPL or commercial license). See [`LICENSING.md`](LICENSING.md) for licensing and redistribution information. When sharing compiled binaries, comply with applicable source-code and license-notice requirements.
 
 The name **Native PDF Eraser** has not been checked for trademark or domain availability.
