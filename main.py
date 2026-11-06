@@ -1,4 +1,4 @@
-"""Native PDF Eraser v1.0 - bilingual Windows desktop GUI (Tkinter)."""
+"""Native PDF Eraser v1.0.1 - bilingual Windows desktop GUI (Tkinter)."""
 from __future__ import annotations
 
 import sys
@@ -161,8 +161,7 @@ class App(tk.Tk):
 
     def change_language(self, event=None):
         self.set_language("de" if self.language_display.get() == "Deutsch" else "en")
-        if self.doc is not None:
-            self.render_page()
+        self.render_page()
 
     def _showinfo(self, title, message, **kwargs):
         return messagebox.showinfo(self.tr(title), self.tr(message), **kwargs)
@@ -307,7 +306,7 @@ class App(tk.Tk):
         self.canvas.bind("<Button-4>", lambda e: self.canvas.yview_scroll(-3, "units"))
         self.canvas.bind("<Button-5>", lambda e: self.canvas.yview_scroll(3, "units"))
         self.canvas.bind("<Configure>", self.resize_canvas)
-        self.canvas.create_text(350, 230, text="PDF öffnen, um zu starten", fill=INK,
+        self.canvas.create_text(350, 230, text=self.tr("PDF öffnen, um zu starten"), fill=INK,
                                 font=("Segoe UI", 18, "bold"), tags="empty")
 
         sidebar = tk.Frame(content, bg=WHITE, width=335)
@@ -543,7 +542,7 @@ class App(tk.Tk):
     def render_page(self):
         self.canvas.delete("all")
         if not self.doc:
-            self.canvas.create_text(350, 230, text="PDF öffnen, um zu starten", fill=INK,
+            self.canvas.create_text(350, 230, text=self.tr("PDF öffnen, um zu starten"), fill=INK,
                                     font=("Segoe UI", 18, "bold"))
             self.page_var.set("Seite – / –")
             self.rect_list.delete(0, "end")
