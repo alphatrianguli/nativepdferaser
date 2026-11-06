@@ -1,3 +1,5 @@
+> **v1.0.1 maintenance update:** Fixed the empty-document message so it displays in English or German and updates immediately when switching languages.
+
 # Native PDF Eraser 1.0 — English / Deutsch
 
 A free-to-build, source-available Windows PDF editing application based on **Python, Tkinter and PyMuPDF**. Its purpose is to remove selected PDF text, embedded images and vector content without flattening the entire page.

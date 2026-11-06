@@ -1,4 +1,4 @@
-"""Native PDF Eraser v1.0.1 - bilingual Windows desktop GUI (Tkinter)."""
+"""Native PDF Eraser v1.0 - bilingual Windows desktop GUI (Tkinter)."""
 from __future__ import annotations
 
 import sys
@@ -22,7 +22,7 @@ from object_recognition import detect_object
 from localization import translate, DE_EN
 
 APP_TITLE = "Native PDF Eraser"
-VERSION = "1.0"
+VERSION = "1.0.1"
 INK = "#1B2E48"
 BLUE = "#1564A7"
 LIGHT = "#F1F6FA"
@@ -161,6 +161,8 @@ class App(tk.Tk):
 
     def change_language(self, event=None):
         self.set_language("de" if self.language_display.get() == "Deutsch" else "en")
+        # Canvas items are not Tk widgets, so language switching must repaint
+        # the empty-document placeholder as well as an open document.
         self.render_page()
 
     def _showinfo(self, title, message, **kwargs):
