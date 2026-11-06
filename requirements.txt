@@ -1,0 +1,3 @@
+# Tested PDF engine version; Windows Python 3.11-3.13 is recommended.
+PyMuPDF==1.26.7
+Pillow>=10.4,<13

@@ -1,0 +1,22 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# Build artifacts
+build/
+dist/
+*.spec
+
+# Local documents and test output
+*.pdf
+*.PDF
+*_cleaned.pdf
+*_bereinigt.pdf
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+Before making the repository public:
+1. Create a GitHub repository named native-pdf-eraser.
+2. Choose the GNU Affero General Public License v3.0 (AGPL-3.0) template for LICENSE.
+3. Upload the CONTENTS of this extracted folder (source files, tests, assets, README, and .gitignore).
+4. Do not upload original customer PDFs, build/ or dist/, or private documents.
+5. A public EXE can be added later using GitHub Releases after it is compiled and tested on Windows.
