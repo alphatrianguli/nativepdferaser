@@ -1,0 +1,86 @@
+name: Build and publish Windows EXE
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "New release version (for example v1.0.1)"
+        required: true
+        type: string
+        default: "v1.0.1"
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    name: Test, build and publish
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install application and build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest "pyinstaller>=6,<7"
+
+      - name: Run automated tests
+        run: python -m pytest -q tests
+
+      - name: Build standalone Windows executable
+        shell: pwsh
+        run: |
+          python -m PyInstaller --noconfirm --clean --onefile --windowed `
+            --name "Native-PDF-Eraser" `
+            --icon "assets/native_pdf_eraser.ico" `
+            --add-data "assets;assets" `
+            --collect-all pymupdf `
+            main.py
+          if ($LASTEXITCODE -ne 0 -or !(Test-Path "dist/Native-PDF-Eraser.exe")) {
+            throw "Windows EXE build failed."
+          }
+
+      - name: Save downloadable build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Native-PDF-Eraser-Windows-${{ inputs.tag }}
+          path: dist/Native-PDF-Eraser.exe
+          if-no-files-found: error
+
+      - name: Publish GitHub Release with EXE
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          $tag = $env:RELEASE_TAG
+          if ($tag -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw "Enter a version such as v1.0.1."
+          }
+          $notes = @"
+          Native PDF Eraser $tag — Windows portable edition
+
+          - Fixed the startup message in English/German and live language switching.
+          - One-file Windows EXE (no Python installation required for end users).
+          - Source code is included in GitHub's source archives below.
+          - PDF removal behavior unchanged from v1.0.
+
+          Notes: This EXE is unsigned and may show Windows security warnings. Review the output PDF before sharing. Source code and licensing information are in this repository.
+          "@
+          $notes | Set-Content -Path release-notes.md -Encoding utf8
+          gh release create "$tag" "dist/Native-PDF-Eraser.exe" `
+            --repo "$env:GITHUB_REPOSITORY" `
+            --target "$env:GITHUB_SHA" `
+            --title "Native PDF Eraser $tag" `
+            --notes-file release-notes.md `
+            --latest
+          if ($LASTEXITCODE -ne 0) {
+            throw "Publishing the GitHub Release failed."
+          }
